@@ -9,15 +9,7 @@ void FrequencyCounter::countFrequency(string file_name) {
 
     while(input_file.get(ch)) {
         frequency_map[ch]++;
-        // tot_ch++;
-        // cout<<(int)ch<<endl;
     }
-
-    // for(auto x : frequency_map) {
-    //     cout<<x.first<<"\t"<<x.second<<endl;
-    // }
-
-    // cout<<"total characters: "<<tot_ch<<endl;
 
     input_file.close();
 }

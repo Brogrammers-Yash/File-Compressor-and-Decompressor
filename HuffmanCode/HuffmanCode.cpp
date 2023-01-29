@@ -36,15 +36,6 @@ void HuffmanCode::buildEncodingTree(unordered_map<char, int> frequency_map) {
         huffman_queue.push(newNode);
     }
 
-    function<void(Node*)> printTree = [&] (Node* node) {
-        if(node == nullptr) return;
-
-        printTree(node->getLeft());
-        // cout<<node->getCharacter()<<" "<<node->getFrequency()<<endl;
-        printTree(node->getRight());
-    };
-
-    printTree(huffman_queue.top());
     huffmanTreeRoot = huffman_queue.top();
 }
 
@@ -100,7 +91,6 @@ void HuffmanCode::writeData(ifstream& input_file, ofstream& output_file) {
         bitset<8> bits;
         stringStream >> bits;
         output_file << char(bits.to_ulong());
-        // cout<<ch;
     }
 
     output_file.close();
@@ -134,13 +124,9 @@ pair<int, int> HuffmanCode::compress(string inputFile) {
     int encodedSize = getEncodedDataSize(char_frequency);
     
     if(encodedSize > 0.8 * original_file_size * 8) {
+        cout<<encodedSize<<" "<<original_file_size * 8<<endl;
         return {original_file_size, 0};
     }
-
-    // cout<<endl<<"character codes:"<<endl;
-    // for(auto ch : char_code) {
-    //     cout<<ch.first<<"\t"<<(int)ch.first<<"\t"<<ch.second<<endl;
-    // }
 
     int compressed_file_size = saveCompressedFile(inputFile);
 
@@ -159,7 +145,6 @@ void HuffmanCode::readHeader(ifstream& compressed_file) {
     }
 
     header_size = stoi(str);
-    // cout<<header_size<<endl;
 
     for(int i=0; i<header_size; i++) {
         str = "";
@@ -174,7 +159,6 @@ void HuffmanCode::readHeader(ifstream& compressed_file) {
         }
 
         char_code[character] = str;
-        // cout<<character<<"\t"<<str<<endl;
     }
 }
 
@@ -230,16 +214,6 @@ void HuffmanCode::buildDecodingTree() {
             }
         }
     }
-
-    function<void(Node*)> printTree = [&] (Node* node) {
-        if(node == nullptr) return;
-
-        printTree(node->getLeft());
-        // cout<<node->getCharacter()<<" "<<node->getFrequency()<<endl;
-        printTree(node->getRight());
-    };
-
-    printTree(huffmanTreeRoot);
 }
 
 int HuffmanCode::saveDecompressedFile(string data, int total_characters, string file_name) {
@@ -283,8 +257,6 @@ pair<int, int> HuffmanCode::decompress(string file_name) {
     int total_characters = getTotalCharacters(compressed_file);
 
     string data = readData(compressed_file);
-
-    // cout<<data<<endl;
 
     int decompressed_file_size = saveDecompressedFile(data, total_characters, file_name.substr(0, file_name.length() - 6));
     int original_file_size = getFileSize(file_name);
